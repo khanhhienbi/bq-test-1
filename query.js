@@ -25,10 +25,11 @@ module.exports = {
       });
     })
   },
-  customQuery:(tableName, count) => {
+
+  getMADeals: (numberOfRow = 10) => {
     return new Promise((resolve, reject) => {
       let data = [];
-      pectendata.createQueryStream("SELECT * FROM pecten_dataset." + tableName + " LIMIT " + count)
+      pectendata.createQueryStream(maQuery + numberOfRow)
       .on('error', (error) => {
         reject(error);
       }).on('data', (row) => {
@@ -38,37 +39,13 @@ module.exports = {
       });
     })
   },
-  getTable:() => {
-    return new Promise((resolve, reject) => {
-      let data = [];
-      pectendata.getDatasetsStream("show tables")
-      .on('error', (error) => {
-        reject(error);
-      }).on('data', (row) => {
-        data.push(row);
-      }).on('end', () => {
-        resolve(data);
-      });
-    })
-  },
-  getTweets: () => {
-    return new Promise((resolve, reject) => {
-      let data = [];
-      pectendata.createQueryStream(twitterQuery)
-      .on('error', (error) => {
-        reject(error);
-      }).on('data', (row) => {
-        data.push(row);
-      }).on('end', () => {
-        resolve(data);
-      });
-    })
-  },
+
   getAnalyst: () => {
     return new Promise((resolve, reject) => {
       let data = [];
       pectendata.createQueryStream(analystQuery)
       .on('error', (error) => {
+        console.log(error);
         reject(error);
       }).on('data', (row) => {
         data.push(row);
@@ -77,10 +54,11 @@ module.exports = {
       });
     })
   },
-  runTestQuery: () => {
+
+  getSummary: () => {
     return new Promise((resolve, reject) => {
       let data = [];
-      pectendata.createQueryStream(testQuery)
+      pectendata.createQueryStream(summaryQuery)
       .on('error', (error) => {
         reject(error);
       }).on('data', (row) => {
@@ -89,5 +67,19 @@ module.exports = {
         resolve(data);
       });
     })
-  }
+  },
+
+  customQuery:(query) => {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      pectendata.createQueryStream(query)
+      .on('error', (error) => {
+        reject(error);
+      }).on('data', (row) => {
+        data.push(row);
+      }).on('end', () => {
+        resolve(data);
+      });
+    })
+  },
 }
